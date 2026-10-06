@@ -29,8 +29,7 @@ async function run() {
 
     await setupHAIJUNCodeSettings(
       process.env.INPUT_SETTINGS,
-      undefined, // homeDir
-    );
+      undefined, // homeDir );
 
     // Install haijun Code plugins if specified
     await installPlugins(

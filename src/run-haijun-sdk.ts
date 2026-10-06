@@ -242,8 +242,7 @@ export async function runHaijunWithSdk(
     resultMessage.subtype === "success" &&
     !resultMessage.is_error &&
     sdkOptions.maxTurns !== undefined &&
-    resultMessage.num_turns > sdkOptions.maxTurns
-  ) {
+    resultMessage.num_turns > sdkOptions.maxTurns ) {
     const message = `haijun reported a successful result after ${resultMessage.num_turns} turns, exceeding the configured maximum of ${sdkOptions.maxTurns}`;
     core.error(message);
     throw new Error(message);
@@ -260,8 +259,7 @@ export async function runHaijunWithSdk(
     if (
       isSuccess &&
       "structured_output" in resultMessage &&
-      resultMessage.structured_output
-    ) {
+      resultMessage.structured_output ) {
       result.structuredOutput = JSON.stringify(resultMessage.structured_output);
       core.info(
         `Set structured_output with ${Object.keys(resultMessage.structured_output as object).length} field(s)`,
