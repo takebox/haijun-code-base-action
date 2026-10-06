@@ -1,9 +1,9 @@
-import { parse as parseShellArgs } from "shell-quote";
-import type { ClaudeOptions } from "./run-claude";
-import type { Options as SdkOptions } from "@anthropic-ai/claude-agent-sdk";
+﻿import { parse as parseShellArgs } from "shell-quote";
+import type { HaijunOptions } from "./run-haijun";
+import type { Options as SdkOptions } from "@Juglow-ai/haijun-agent-sdk";
 
 /**
- * Result of parsing ClaudeOptions for SDK usage
+ * Result of parsing HaijunOptions for SDK usage
  */
 export type ParsedSdkOptions = {
   sdkOptions: SdkOptions;
@@ -27,24 +27,24 @@ const ACCUMULATE_DELIMITER = "\x00";
 
 // shell-quote treats ()|&;<> as control operators and splits adjacent text
 // around them into separate tokens (returned as `{op}` objects, which we then
-// dropped). For CLI args these must be literal characters — e.g. unquoted
+// dropped). For CLI args these must be literal characters â€” e.g. unquoted
 // `--allowedTools Bash(gh:*)` was being mangled into bare `Bash`, silently
 // widening a scoped permission rule to Bash(*). We escape each metachar to a
 // Unicode private-use codepoint before parsing and restore it afterward,
 // keeping shell-quote's quote/whitespace handling intact.
 const SHELL_META_PAIRS: [string, string][] = [
-  ["(", ""],
-  [")", ""],
-  ["|", ""],
-  ["&", ""],
-  [";", ""],
-  ["<", ""],
-  [">", ""],
+  ["(", "î€€"],
+  [")", "î€"],
+  ["|", "î€‚"],
+  ["&", "î€ƒ"],
+  [";", "î€„"],
+  ["<", "î€…"],
+  [">", "î€†"],
 ];
 const SHELL_META_ESCAPE = new Map(SHELL_META_PAIRS);
 const SHELL_META_UNESCAPE = new Map(SHELL_META_PAIRS.map(([k, v]) => [v, k]));
 const SHELL_META_ESCAPE_RE = /[()|&;<>]/g;
-const SHELL_META_UNESCAPE_RE = /[-]/g;
+const SHELL_META_UNESCAPE_RE = /[î€€-î€†]/g;
 
 function escapeShellMeta(s: string): string {
   return s.replace(SHELL_META_ESCAPE_RE, (c) => SHELL_META_ESCAPE.get(c)!);
@@ -113,7 +113,7 @@ function mergeMcpConfigs(configValues: string[]): string {
  * Strip comment lines from a shell argument string.
  * Lines whose first non-whitespace character is `#` are removed entirely.
  * Inline `#` within a line (e.g. inside a quoted value) is left untouched
- * because shell-quote handles quoting — we only need to remove full comment lines
+ * because shell-quote handles quoting â€” we only need to remove full comment lines
  * before shell-quote sees them.
  */
 function stripShellComments(input: string): string {
@@ -124,24 +124,24 @@ function stripShellComments(input: string): string {
 }
 
 /**
- * Parse claudeArgs string into extraArgs record for SDK pass-through
+ * Parse HaijunArgs string into extraArgs record for SDK pass-through
  * The SDK/CLI will handle --mcp-config, --json-schema, etc.
  * For allowedTools and disallowedTools, multiple occurrences are accumulated (null-char joined).
  * Accumulating flags also consume all consecutive non-flag values
  * (e.g., --allowed-tools "Tool1" "Tool2" "Tool3" captures all three).
  */
-function parseClaudeArgsToExtraArgs(
-  claudeArgs?: string,
+function parseHaijunArgsToExtraArgs(
+  HaijunArgs?: string,
 ): Record<string, string | null> {
-  if (!claudeArgs?.trim()) return {};
+  if (!HaijunArgs?.trim()) return {};
 
   const result: Record<string, string | null> = {};
-  const args = parseShellArgs(escapeShellMeta(stripShellComments(claudeArgs)))
+  const args = parseShellArgs(escapeShellMeta(stripShellComments(HaijunArgs)))
     .map((arg) => {
       if (typeof arg === "string") return unescapeShellMeta(arg);
       // With control metachars escaped above, the only non-string shell-quote
       // can still emit is a glob op (bareword containing *, ?, or [). Its
-      // `pattern` field is the verbatim token text — use it as-is so values
+      // `pattern` field is the verbatim token text â€” use it as-is so values
       // like `Bash(cmd:*)` and `Read(path/**)` round-trip intact.
       if (typeof arg === "object" && arg !== null && "pattern" in arg) {
         return unescapeShellMeta((arg as { pattern: string }).pattern);
@@ -187,24 +187,24 @@ function parseClaudeArgsToExtraArgs(
 }
 
 /**
- * Parse ClaudeOptions into SDK-compatible options
+ * Parse HaijunOptions into SDK-compatible options
  * Uses extraArgs for CLI pass-through instead of duplicating option parsing
  */
-export function parseSdkOptions(options: ClaudeOptions): ParsedSdkOptions {
+export function parseSdkOptions(options: HaijunOptions): ParsedSdkOptions {
   // Determine output verbosity
   const isDebugMode = process.env.ACTIONS_STEP_DEBUG === "true";
   const showFullOutput = options.showFullOutput === "true" || isDebugMode;
 
-  // Parse claudeArgs into extraArgs for CLI pass-through
-  const extraArgs = parseClaudeArgsToExtraArgs(options.claudeArgs);
+  // Parse HaijunArgs into extraArgs for CLI pass-through
+  const extraArgs = parseHaijunArgsToExtraArgs(options.HaijunArgs);
 
   // Detect if --json-schema is present (for hasJsonSchema flag)
   const hasJsonSchema = "json-schema" in extraArgs;
 
-  const modelFromClaudeArgs = extraArgs["model"] || undefined;
+  const modelFromHaijunArgs = extraArgs["model"] || undefined;
   delete extraArgs["model"];
 
-  const maxTurnsFromClaudeArgs = extraArgs["max-turns"] || undefined;
+  const maxTurnsFromHaijunArgs = extraArgs["max-turns"] || undefined;
   delete extraArgs["max-turns"];
 
   const additionalDirectories = extraArgs["add-dir"]
@@ -216,10 +216,10 @@ export function parseSdkOptions(options: ClaudeOptions): ParsedSdkOptions {
   delete extraArgs["add-dir"];
 
   // Extract and merge allowedTools from all sources:
-  // 1. From extraArgs (parsed from claudeArgs - contains tag mode's tools)
+  // 1. From extraArgs (parsed from HaijunArgs - contains tag mode's tools)
   //    - Check both camelCase (--allowedTools) and hyphenated (--allowed-tools) variants
   // 2. From options.allowedTools (direct input - may be undefined)
-  // This prevents duplicate flags being overwritten when claudeArgs contains --allowedTools
+  // This prevents duplicate flags being overwritten when HaijunArgs contains --allowedTools
   const allowedToolsValues = [
     extraArgs["allowedTools"],
     extraArgs["allowed-tools"],
@@ -280,12 +280,12 @@ export function parseSdkOptions(options: ClaudeOptions): ParsedSdkOptions {
   if (process.env.INPUT_ACTION_INPUTS_PRESENT) {
     env.GITHUB_ACTION_INPUTS = process.env.INPUT_ACTION_INPUTS_PRESENT;
   }
-  // Set the entrypoint for Claude Code to identify this as the GitHub Action
-  env.CLAUDE_CODE_ENTRYPOINT = "claude-code-github-action";
+  // Set the entrypoint for haijun Code to identify this as the GitHub Action
+  env.Haijun_CODE_ENTRYPOINT = "haijun-code-github-action";
 
-  // Remove OIDC token request variables so Claude cannot mint new tokens.
+  // Remove OIDC token request variables so haijun cannot mint new tokens.
   // These are only needed by the action itself (via @actions/core.getIDToken()),
-  // not by the Claude session.
+  // not by the haijun session.
   delete env.ACTIONS_ID_TOKEN_REQUEST_URL;
   delete env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
 
@@ -293,32 +293,32 @@ export function parseSdkOptions(options: ClaudeOptions): ParsedSdkOptions {
   // input presence (collectActionInputsPresence) and contains serialized workflow inputs.
   delete env.ALL_INPUTS;
 
-  // Build system prompt option - default to claude_code preset
+  // Build system prompt option - default to haijun_code preset
   let systemPrompt: SdkOptions["systemPrompt"];
   if (options.systemPrompt) {
     systemPrompt = options.systemPrompt;
   } else if (options.appendSystemPrompt) {
     systemPrompt = {
       type: "preset",
-      preset: "claude_code",
+      preset: "haijun_code",
       append: options.appendSystemPrompt,
     };
   } else {
-    // Default to claude_code preset when no custom prompt is specified
+    // Default to haijun_code preset when no custom prompt is specified
     systemPrompt = {
       type: "preset",
-      preset: "claude_code",
+      preset: "haijun_code",
     };
   }
 
-  // Build SDK options - use merged tools from both direct options and claudeArgs
+  // Build SDK options - use merged tools from both direct options and HaijunArgs
   const sdkOptions: SdkOptions = {
-    // Direct options from ClaudeOptions inputs
-    model: options.model || modelFromClaudeArgs,
+    // Direct options from HaijunOptions inputs
+    model: options.model || modelFromHaijunArgs,
     maxTurns: options.maxTurns
       ? parseInt(options.maxTurns, 10)
-      : maxTurnsFromClaudeArgs
-        ? parseInt(maxTurnsFromClaudeArgs, 10)
+      : maxTurnsFromHaijunArgs
+        ? parseInt(maxTurnsFromHaijunArgs, 10)
         : undefined,
     allowedTools:
       mergedAllowedTools.length > 0 ? mergedAllowedTools : undefined,
@@ -326,11 +326,11 @@ export function parseSdkOptions(options: ClaudeOptions): ParsedSdkOptions {
       mergedDisallowedTools.length > 0 ? mergedDisallowedTools : undefined,
     systemPrompt,
     fallbackModel: options.fallbackModel,
-    pathToClaudeCodeExecutable: options.pathToClaudeCodeExecutable,
+    pathTohaijunCodeExecutable: options.pathTohaijunCodeExecutable,
     additionalDirectories:
       additionalDirectories.length > 0 ? additionalDirectories : undefined,
 
-    // Pass through claudeArgs as extraArgs - CLI handles --mcp-config, --json-schema, etc.
+    // Pass through HaijunArgs as extraArgs - CLI handles --mcp-config, --json-schema, etc.
     // Note: allowedTools and disallowedTools have been removed from extraArgs to prevent duplicates
     extraArgs,
     env,

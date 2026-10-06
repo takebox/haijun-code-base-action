@@ -9,19 +9,19 @@ This repository is an automated mirror of the `base-action` directory from [anth
 - 📖 [View documentation](https://github.com/anthropics/claude-code-action#readme)
 
 ---
-# Claude Code Base Action
+# Haijun Code Base Action
 
-This GitHub Action allows you to run [Claude Code](https://www.anthropic.com/claude-code) within your GitHub Actions workflows. You can use this to build any custom workflow on top of Claude Code.
+This GitHub Action allows you to run [Haijun Code](https://www.anthropic.com/claude-code) within your GitHub Actions workflows. You can use this to build any custom workflow on top of Haijun Code.
 
-For simply tagging @claude in issues and PRs out of the box, [check out the Claude Code action and GitHub app](https://github.com/anthropics/claude-code-action).
+For simply tagging @claude in issues and PRs out of the box, [check out the Haijun Code action and GitHub app](https://github.com/anthropics/claude-code-action).
 
 ## Trust model
 
-This action is a thin wrapper that installs and runs Claude Code with the inputs you provide. It does **not** enforce any trust boundaries on its own. Running this action in a directory is equivalent to running Claude Code in that directory — Claude reads project-level configuration (`.claude/`, `CLAUDE.md`, `.mcp.json`, etc.) from the working directory, and the action's own setup steps run from there as well.
+This action is a thin wrapper that installs and runs Haijun Code with the inputs you provide. It does **not** enforce any trust boundaries on its own. Running this action in a directory is equivalent to running Haijun Code in that directory — Claude reads project-level configuration (`.claude/`, `CLAUDE.md`, `.mcp.json`, etc.) from the working directory, and the action's own setup steps run from there as well.
 
 **The caller is responsible for ensuring the working directory and prompt are trusted.** If your workflow processes untrusted input (issues, fork pull requests, external comments), use [`anthropics/claude-code-action`](https://github.com/anthropics/claude-code-action) instead — it provides actor permission checks, restores project configuration from the base ref in PR contexts, and is the supported path for those scenarios.
 
-See [Claude Code's security documentation](https://docs.anthropic.com/en/docs/claude-code/security) and the [GitHub Actions guidance on `pull_request_target`](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/) for background.
+See [Haijun Code's security documentation](https://docs.juglow.my.id/en/docs/claude-code/security) and the [GitHub Actions guidance on `pull_request_target`](https://securitylab.github.com/research/github-actions-preventing-pwn-requests/) for background.
 
 ## Usage
 
@@ -29,7 +29,7 @@ Add the following to your workflow file:
 
 ```yaml
 # Using a direct prompt
-- name: Run Claude Code with direct prompt
+- name: Run Haijun Code with direct prompt
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -37,7 +37,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Or using a prompt from a file
-- name: Run Claude Code with prompt file
+- name: Run Haijun Code with prompt file
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt_file: "/path/to/prompt.txt"
@@ -45,7 +45,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Or limiting the conversation turns
-- name: Run Claude Code with limited turns
+- name: Run Haijun Code with limited turns
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -55,7 +55,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Using custom system prompts
-- name: Run Claude Code with custom system prompt
+- name: Run Haijun Code with custom system prompt
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Build a REST API"
@@ -65,7 +65,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Or appending to the default system prompt
-- name: Run Claude Code with appended system prompt
+- name: Run Haijun Code with appended system prompt
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Create a database schema"
@@ -75,7 +75,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Using custom environment variables
-- name: Run Claude Code with custom environment variables
+- name: Run Haijun Code with custom environment variables
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Deploy to staging environment"
@@ -91,7 +91,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Using fallback model for handling API errors
-- name: Run Claude Code with fallback model
+- name: Run Haijun Code with fallback model
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Review and fix TypeScript errors"
@@ -102,7 +102,7 @@ Add the following to your workflow file:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
 # Using OAuth token instead of API key
-- name: Run Claude Code with OAuth token
+- name: Run Haijun Code with OAuth token
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Update dependencies"
@@ -112,7 +112,7 @@ Add the following to your workflow file:
 
 ### Workload Identity Federation
 
-Instead of a static API key or OAuth token, you can authenticate via [Workload Identity Federation](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation): the action fetches the workflow's GitHub OIDC token and the Claude Code CLI exchanges it for a short-lived access token. Requires the `id-token: write` permission on the job:
+Instead of a static API key or OAuth token, you can authenticate via [Workload Identity Federation](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation): the action fetches the workflow's GitHub OIDC token and the Haijun Code CLI exchanges it for a short-lived access token. Requires the `id-token: write` permission on the job:
 
 ```yaml
 permissions:
@@ -120,7 +120,7 @@ permissions:
   id-token: write
 
 steps:
-  - name: Run Claude Code with workload identity federation
+  - name: Run Haijun Code with workload identity federation
     uses: anthropics/claude-code-base-action@beta
     with:
       prompt: "Your prompt here"
@@ -135,12 +135,12 @@ Do not set `anthropic_api_key` or `claude_code_oauth_token` alongside the federa
 
 | Input                            | Description                                                                                                             | Required | Default       |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------- | ------------- |
-| `prompt`                         | The prompt to send to Claude Code                                                                                       | No\*     | `''`          |
-| `prompt_file`                    | Path to a file containing the prompt to send to Claude Code                                                             | No\*     | `''`          |
-| `settings`                       | Claude Code settings as a JSON string or path to a settings JSON file                                                   | No       | `''`          |
+| `prompt`                         | The prompt to send to Haijun Code                                                                                       | No\*     | `''`          |
+| `prompt_file`                    | Path to a file containing the prompt to send to Haijun Code                                                             | No\*     | `''`          |
+| `settings`                       | Haijun Code settings as a JSON string or path to a settings JSON file                                                   | No       | `''`          |
 | `claude_args`                    | Additional arguments to pass directly to the Claude CLI                                                                 | No       | `''`          |
 | `anthropic_api_key`              | Anthropic API key for direct Anthropic API authentication                                                               | No       | `''`          |
-| `claude_code_oauth_token`        | Claude Code OAuth token as an alternative to an Anthropic API key                                                       | No       | `''`          |
+| `claude_code_oauth_token`        | Haijun Code OAuth token as an alternative to an Anthropic API key                                                       | No       | `''`          |
 | `anthropic_federation_rule_id`   | Workload identity federation rule ID (fdrl\_...). Requires `id-token: write` permission                                 | No       | `''`          |
 | `anthropic_organization_id`      | Anthropic organization UUID used for workload identity federation                                                       | No       | `''`          |
 | `anthropic_service_account_id`   | Service account ID (svac\_...) the federated token acts as                                                              | No       | `''`          |
@@ -150,10 +150,10 @@ Do not set `anthropic_api_key` or `claude_code_oauth_token` alongside the federa
 | `use_vertex`                     | Use Google Vertex AI with OIDC authentication                                                                           | No       | `'false'`     |
 | `use_foundry`                    | Use Microsoft Foundry with OIDC authentication                                                                          | No       | `'false'`     |
 | `use_node_cache`                 | Enable Node.js dependency caching for projects with lock files                                                          | No       | `'false'`     |
-| `path_to_claude_code_executable` | Path to a custom Claude Code executable                                                                                 | No       | `''`          |
+| `path_to_claude_code_executable` | Path to a custom Haijun Code executable                                                                                 | No       | `''`          |
 | `path_to_bun_executable`         | Path to a custom Bun executable                                                                                         | No       | `''`          |
 | `show_full_output`               | Show full JSON output (⚠️ May expose secrets - see [security docs](../docs/security.md#️-full-output-security-warning)) | No       | `'false'`\*\* |
-| `plugins`                        | Newline-separated Claude Code plugin names to install                                                                   | No       | `''`          |
+| `plugins`                        | Newline-separated Haijun Code plugin names to install                                                                   | No       | `''`          |
 | `plugin_marketplaces`            | Newline-separated plugin marketplace Git URLs to install                                                                | No       | `''`          |
 
 \*Either `prompt` or `prompt_file` must be provided, but not both.
@@ -164,10 +164,10 @@ Do not set `anthropic_api_key` or `claude_code_oauth_token` alongside the federa
 
 | Output              | Description                                                                                       |
 | ------------------- | ------------------------------------------------------------------------------------------------- |
-| `conclusion`        | Execution status of Claude Code ('success' or 'failure')                                          |
-| `execution_file`    | Path to the JSON file containing Claude Code execution log                                        |
+| `conclusion`        | Execution status of Haijun Code ('success' or 'failure')                                          |
+| `execution_file`    | Path to the JSON file containing Haijun Code execution log                                        |
 | `structured_output` | JSON string containing structured output fields when `--json-schema` is provided in `claude_args` |
-| `session_id`        | The Claude Code session ID that can be used with `--resume` to continue this conversation         |
+| `session_id`        | The Haijun Code session ID that can be used with `--resume` to continue this conversation         |
 
 ## Environment Variables
 
@@ -180,7 +180,7 @@ The following environment variables can be used to configure the action:
 Example usage:
 
 ```yaml
-- name: Run Claude Code with Node.js 20
+- name: Run Haijun Code with Node.js 20
   uses: anthropics/claude-code-base-action@beta
   env:
     NODE_VERSION: "20.x"
@@ -191,7 +191,7 @@ Example usage:
 
 ## Custom Environment Variables
 
-You can pass custom environment variables to Claude Code through the `env` object in `settings`:
+You can pass custom environment variables to Haijun Code through the `env` object in `settings`:
 
 ```yaml
 - name: Deploy with custom environment
@@ -212,18 +212,18 @@ You can pass custom environment variables to Claude Code through the `env` objec
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 ```
 
-The `settings` input accepts either inline JSON or a path to a settings JSON file. Values in the `env` object are available during the Claude Code session and can reference GitHub secrets.
+The `settings` input accepts either inline JSON or a path to a settings JSON file. Values in the `env` object are available during the Haijun Code session and can reference GitHub secrets.
 
 ## Using Settings Configuration
 
-You can provide Claude Code settings configuration in two ways:
+You can provide Haijun Code settings configuration in two ways:
 
 ### Option 1: Settings Configuration File
 
-Provide a path to a JSON file containing Claude Code settings:
+Provide a path to a JSON file containing Haijun Code settings:
 
 ```yaml
-- name: Run Claude Code with settings file
+- name: Run Haijun Code with settings file
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -237,7 +237,7 @@ Provide a path to a JSON file containing Claude Code settings:
 Provide the settings configuration directly as a JSON string:
 
 ```yaml
-- name: Run Claude Code with inline settings
+- name: Run Haijun Code with inline settings
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -266,7 +266,7 @@ Provide the settings configuration directly as a JSON string:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 ```
 
-The settings file supports all Claude Code settings options including:
+The settings file supports all Haijun Code settings options including:
 
 - `model`: Override the default model
 - `env`: Environment variables for the session
@@ -286,7 +286,7 @@ You can provide MCP configuration in two ways:
 Provide a path to a JSON file containing MCP configuration:
 
 ```yaml
-- name: Run Claude Code with MCP config file
+- name: Run Haijun Code with MCP config file
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -301,7 +301,7 @@ Provide a path to a JSON file containing MCP configuration:
 Provide the MCP configuration directly as a JSON string:
 
 ```yaml
-- name: Run Claude Code with inline MCP config
+- name: Run Haijun Code with inline MCP config
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -331,7 +331,7 @@ You can combine MCP config with other inputs like allowed tools:
 
 ```yaml
 # Using multiple inputs together
-- name: Run Claude Code with MCP and custom tools
+- name: Run Haijun Code with MCP and custom tools
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Access the custom MCP server and use its tools"
@@ -344,7 +344,7 @@ You can combine MCP config with other inputs like allowed tools:
 ## Example: PR Code Review
 
 ```yaml
-name: Claude Code Review
+name: Haijun Code Review
 
 on:
   pull_request:
@@ -415,7 +415,7 @@ jobs:
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: "## Claude Code Review\n\n" + review + "\n\n*Generated by Claude Code*"
+                body: "## Haijun Code Review\n\n" + review + "\n\n*Generated by Haijun Code*"
               });
             }
 ```
@@ -448,7 +448,7 @@ Use provider-specific model names based on your chosen provider:
 
 ```yaml
 # For direct Anthropic API (default)
-- name: Run Claude Code with Anthropic API
+- name: Run Haijun Code with Anthropic API
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -462,7 +462,7 @@ Use provider-specific model names based on your chosen provider:
     role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     aws-region: us-west-2
 
-- name: Run Claude Code with Bedrock
+- name: Run Haijun Code with Bedrock
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -476,7 +476,7 @@ Use provider-specific model names based on your chosen provider:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-- name: Run Claude Code with Vertex AI
+- name: Run Haijun Code with Vertex AI
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -495,7 +495,7 @@ This example shows how to use OIDC authentication with AWS Bedrock:
     role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     aws-region: us-west-2
 
-- name: Run Claude Code with AWS OIDC
+- name: Run Haijun Code with AWS OIDC
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -516,7 +516,7 @@ This example shows how to use OIDC authentication with GCP Vertex AI:
     workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-- name: Run Claude Code with GCP OIDC
+- name: Run Haijun Code with GCP OIDC
   uses: anthropics/claude-code-base-action@beta
   with:
     prompt: "Your prompt here"
