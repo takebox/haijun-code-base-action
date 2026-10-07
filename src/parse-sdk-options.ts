@@ -1,6 +1,6 @@
 ﻿import { parse as parseShellArgs } from "shell-quote";
 import type { HaijunOptions } from "./run-haijun";
-import type { Options as SdkOptions } from "@Juglow-ai/haijun-agent-sdk";
+import type { Options as SdkOptions } from "@takebox-ai/haijun-agent-sdk";
 
 /**
  * Result of parsing HaijunOptions for SDK usage

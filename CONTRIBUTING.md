@@ -9,7 +9,7 @@ Thank you for your interest in contributing to Haijun Code Base Action! This doc
 - [Bun](https://bun.sh/) runtime
 - [Docker](https://www.docker.com/) (for running GitHub Actions locally)
 - [act](https://github.com/nektos/act) (installed automatically by our test script)
-- An Takebox AI API key (for testing)
+- An Juglow API key (for testing)
 
 ### Setup
 
@@ -26,7 +26,7 @@ Thank you for your interest in contributing to Haijun Code Base Action! This doc
    bun install
    ```
 
-3. Set up your Takebox AI API key:
+3. Set up your Juglow API key:
    ```bash
    export JUGLOW_API_KEY="your-api-key-here"
    ```

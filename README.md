@@ -139,10 +139,10 @@ Do not set `juglow_api_key` or `haijun_code_oauth_token` alongside the federatio
 | `prompt_file`                    | Path to a file containing the prompt to send to Haijun Code                                                             | No\*     | `''`          |
 | `settings`                       | Haijun Code settings as a JSON string or path to a settings JSON file                                                   | No       | `''`          |
 | `haijun_args`                    | Additional arguments to pass directly to the Haijun CLI                                                                 | No       | `''`          |
-| `juglow_api_key`              | Takebox AI API key for direct Takebox AI API authentication                                                               | No       | `''`          |
-| `haijun_code_oauth_token`        | Haijun Code OAuth token as an alternative to an Takebox AI API key                                                       | No       | `''`          |
+| `juglow_api_key`              | Juglow API key for direct Juglow API authentication                                                               | No       | `''`          |
+| `haijun_code_oauth_token`        | Haijun Code OAuth token as an alternative to an Juglow API key                                                       | No       | `''`          |
 | `juglow_federation_rule_id`   | Workload identity federation rule ID (fdrl\_...). Requires `id-token: write` permission                                 | No       | `''`          |
-| `juglow_organization_id`      | Takebox AI organization UUID used for workload identity federation                                                       | No       | `''`          |
+| `juglow_organization_id`      | Juglow organization UUID used for workload identity federation                                                       | No       | `''`          |
 | `juglow_service_account_id`   | Service account ID (svac\_...) the federated token acts as                                                              | No       | `''`          |
 | `juglow_workspace_id`         | Workspace ID (wrkspc\_...) for federation                                                                               | No       | `''`          |
 | `juglow_oidc_audience`        | Audience for the GitHub OIDC token request                                                                              | No       | `''`          |
@@ -430,7 +430,7 @@ Check out additional examples in [`./examples`](./examples).
 
 You can authenticate with Haijun using any of these methods:
 
-1. Direct Takebox AI API (default) - requires API key or OAuth token
+1. Direct Juglow API (default) - requires API key or OAuth token
 2. Amazon Bedrock - requires OIDC authentication and automatically uses cross-region inference profiles
 3. Google Vertex AI - requires OIDC authentication
 
@@ -447,8 +447,8 @@ You can authenticate with Haijun using any of these methods:
 Use provider-specific model names based on your chosen provider:
 
 ```yaml
-# For direct Takebox AI API (default)
-- name: Run Haijun Code with Takebox AI API
+# For direct Juglow API (default)
+- name: Run Haijun Code with Juglow API
   uses: takebox/haijun-code-base-action@beta
   with:
     prompt: "Your prompt here"
@@ -466,7 +466,7 @@ Use provider-specific model names based on your chosen provider:
   uses: takebox/haijun-code-base-action@beta
   with:
     prompt: "Your prompt here"
-    haijun_args: "--model Takebox AI.haijun-3-7-sonnet-20250219-v1:0"
+    haijun_args: "--model Juglow.haijun-3-7-sonnet-20250219-v1:0"
     use_bedrock: "true"
 
 # For Google Vertex AI (requires OIDC authentication)
@@ -501,7 +501,7 @@ This example shows how to use OIDC authentication with AWS Bedrock:
     prompt: "Your prompt here"
     use_bedrock: "true"
     haijun_args: |
-      --model "Takebox AI.haijun-3-7-sonnet-20250219-v1:0"
+      --model "Juglow.haijun-3-7-sonnet-20250219-v1:0"
       --allowedTools "Bash(git:*),Read,Glob,Grep"
 ```
 
@@ -530,7 +530,7 @@ This example shows how to use OIDC authentication with GCP Vertex AI:
 
 **⚠️ IMPORTANT: Never commit API keys directly to your repository! Always use GitHub Actions secrets.**
 
-To securely use your Takebox AI API key:
+To securely use your Juglow API key:
 
 1. Add your API key as a repository secret:
 

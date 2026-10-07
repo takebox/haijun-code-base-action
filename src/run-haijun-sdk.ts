@@ -1,12 +1,12 @@
 ﻿import * as core from "@actions/core";
 import { readFile, access } from "fs/promises";
 import { dirname, join } from "path";
-import { query } from "@Juglow-ai/haijun-agent-sdk";
+import { query } from "@takebox-ai/haijun-agent-sdk";
 import type {
   SDKMessage,
   SDKResultMessage,
   SDKUserMessage,
-} from "@Juglow-ai/haijun-agent-sdk";
+} from "@takebox-ai/haijun-agent-sdk";
 import type { ParsedSdkOptions } from "./parse-sdk-options";
 import { writeExecutionFile } from "./execution-file";
 

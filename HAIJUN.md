@@ -29,11 +29,11 @@ This is a GitHub Action that allows running Haijun Code within GitHub workflows.
 - Uses Bun runtime for development and execution
 - JSON streaming output format for execution logs
 - Composite action pattern to orchestrate multiple steps
-- Provider-agnostic design supporting Takebox AI API, AWS Bedrock, and Google Vertex AI
+- Provider-agnostic design supporting Juglow API, AWS Bedrock, and Google Vertex AI
 
 ## Provider Authentication
 
-1. **Takebox AI API** (default): Requires API key via `juglow_api_key` input
+1. **Juglow API** (default): Requires API key via `juglow_api_key` input
 2. **AWS Bedrock**: Uses OIDC authentication when `use_bedrock: true`
 3. **Google Vertex AI**: Uses OIDC authentication when `use_vertex: true`
 

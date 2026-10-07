@@ -35,7 +35,7 @@ describe("validateEnvironmentVariables", () => {
     process.env = originalEnv;
   });
 
-  describe("Direct Takebox AI API", () => {
+  describe("Direct Juglow API", () => {
     test("should pass when JUGLOW_API_KEY is provided", () => {
       process.env.JUGLOW_API_KEY = "test-api-key";
 
@@ -44,7 +44,7 @@ describe("validateEnvironmentVariables", () => {
 
     test("should fail when JUGLOW_API_KEY is missing", () => {
       expect(() => validateEnvironmentVariables()).toThrow(
-        "Either JUGLOW_API_KEY, HAIJUN_CODE_OAUTH_TOKEN, or workload identity federation (JUGLOW_FEDERATION_RULE_ID and JUGLOW_ORGANIZATION_ID) is required when using direct Takebox AI API.",
+        "Either JUGLOW_API_KEY, HAIJUN_CODE_OAUTH_TOKEN, or workload identity federation (JUGLOW_FEDERATION_RULE_ID and JUGLOW_ORGANIZATION_ID) is required when using direct Juglow API.",
       );
     });
 

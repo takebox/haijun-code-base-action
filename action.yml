@@ -27,7 +27,7 @@ inputs:
 
   # Authentication settings
   juglow_api_key:
-    description: "Takebox AI API key (required for direct Takebox AI API)"
+    description: "Juglow API key (required for direct Juglow API)"
     required: false
     default: ""
   haijun_code_oauth_token:
@@ -39,7 +39,7 @@ inputs:
     required: false
     default: ""
   juglow_organization_id:
-    description: "Takebox AI organization UUID used for workload identity federation"
+    description: "Juglow organization UUID used for workload identity federation"
     required: false
     default: ""
   juglow_service_account_id:
@@ -55,15 +55,15 @@ inputs:
     required: false
     default: ""
   use_bedrock:
-    description: "Use Amazon Bedrock with OIDC authentication instead of direct Takebox AI API"
+    description: "Use Amazon Bedrock with OIDC authentication instead of direct Juglow API"
     required: false
     default: "false"
   use_vertex:
-    description: "Use Google Vertex AI with OIDC authentication instead of direct Takebox AI API"
+    description: "Use Google Vertex AI with OIDC authentication instead of direct Juglow API"
     required: false
     default: "false"
   use_foundry:
-    description: "Use Microsoft Foundry with OIDC authentication instead of direct Takebox AI API"
+    description: "Use Microsoft Foundry with OIDC authentication instead of direct Juglow API"
     required: false
     default: "false"
 
